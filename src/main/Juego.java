@@ -1,76 +1,106 @@
+package main;
+
 import java.util.Scanner;
+import piezas.Pieza;
+import piezas.Peon;
 
-
+/**
+ * Controlador principal del flujo del juego.
+ */
 public class Juego {
-    private Tablero tablero;
-    private Jugador jugador1;
-    private Jugador jugador2;
-    private Jugador jugadorActual;
+    private final Tablero tablero;
+    private final Jugador j1;
+    private final Jugador j2;
+    private Jugador actual;
 
-    public Juego(String nombre1, String nombre2) {
+    public Juego() {
         this.tablero = new Tablero();
-        this.jugador1 = new Jugador(nombre1, true);
-        this.jugador2 = new Jugador(nombre2, false);
-        this.jugadorActual = jugador1;
+        this.j1 = new Jugador("Blanco", true);
+        this.j2 = new Jugador("Negro", false);
+        this.actual = j1;
     }
 
-    public Tablero getTablero() {
-        return tablero;
-    }
+    public void jugar() {
+        Scanner lector = new Scanner(System.in);
+        boolean partidaActiva = true;
 
-    public Jugador getJugador1() {
-        return jugador1;
-    }
+        System.out.println("=== AJEDREZ PROFESIONAL JAVA ===");
 
-    public Jugador getJugador2() {
-        return jugador2;
-    }
-
-    public Jugador getJugadorActual() {
-        return jugadorActual;
-    }
-
-    public void cambiarTurno() {
-        jugadorActual = (jugadorActual == jugador1) ? jugador2 : jugador1;
-    }
-
-    public void iniciarPartida() {
-        System.out.println("=== Bienvenido al Juego de Ajedrez ===");
-        System.out.println("Jugador 1: " + jugador1.getNombre() + " (Blancas)");
-        System.out.println("Jugador 2: " + jugador2.getNombre() + " (Negras)");
-        System.out.println("======================================\n");
-        
-        jugar();
-    }
-
-    private void jugar() {
-        boolean enPartida = true;
-        
-        while (enPartida) {
+        while (partidaActiva) {
             tablero.mostrarTablero();
-            System.out.println("\nTurno de: " + jugadorActual.getNombre());
-            System.out.print("Ingrese fila de origen (0-7) o 'salir' para terminar: ");
-            
-            String entrada = System.console() != null ? System.console().readLine() : "salir";
-            
-            if (entrada.equalsIgnoreCase("salir")) {
-                enPartida = false;
-                System.out.println("\n¡Partida terminada!");
-                mostrarResultados();
-            } else {
-                cambiarTurno();
+            System.out.println("\nTurno de: " + actual.getNombre() + " (" + (actual.isBlanco() ? "B" : "N") + ")");
+
+            // Verificar jaque
+            if (tablero.estaEnJaque(actual.isBlanco())) {
+                System.out.println("⚠️  ¡JAQUE! Tu rey está bajo amenaza.");
+                if (tablero.esJaqueMate(actual.isBlanco())) {
+                    Jugador ganador = actual == j1 ? j2 : j1;
+                    System.out.println("\n¡JAQUE MATE! El jugador " + ganador.getNombre() + " ha ganado.");
+                    partidaActiva = false;
+                    break;
+                }
+            }
+
+            try {
+                System.out.print("Fila Origen: ");
+                int fO = lector.nextInt();
+                System.out.print("Columna Origen: ");
+                int cO = lector.nextInt();
+                System.out.print("Fila Destino: ");
+                int fD = lector.nextInt();
+                System.out.print("Columna Destino: ");
+                int cD = lector.nextInt();
+
+                // Intentar realizar el movimiento
+                Pieza resultado = tablero.moverPieza(fO, cO, fD, cD, actual.isBlanco());
+
+                if (resultado != null) {
+                    System.out.println(">> Movimiento confirmado.");
+
+                    // Si se capturó una pieza real
+                    if (resultado.getFila() != -1) {
+                        actual.capturarPieza();
+                    }
+
+                    // Verificar promoción de peón
+                    Pieza piezaMovida = tablero.obtenerPieza(fD, cD);
+                    if (piezaMovida instanceof Peon && ((Peon) piezaMovida).debeSerPromovido()) {
+                        System.out.println("\n¡Promoción de peón! Elige el tipo:");
+                        System.out.println("R - Reina (recomendado)");
+                        System.out.println("T - Torre");
+                        System.out.println("A - Alfil");
+                        System.out.println("C - Caballo");
+                        System.out.print("Opción: ");
+                        char opcion = lector.next().toUpperCase().charAt(0);
+                        
+                        if (tablero.promoverPeon(fD, cD, opcion)) {
+                            System.out.println(">> Peón promovido a " + opcion);
+                        } else {
+                            System.out.println("!! Opción inválida. Peón promovido a Reina.");
+                            tablero.promoverPeon(fD, cD, 'R');
+                        }
+                    }
+
+                    // Cambiar turno
+                    actual = (actual == j1) ? j2 : j1;
+
+                } else {
+                    System.out.println("!! Error: Movimiento ilegal o casilla vacía.");
+                }
+
+            } catch (Exception e) {
+                System.out.println("!! Error: Entrada no válida. Use números del 0 al 7.");
+                lector.nextLine();
             }
         }
-    }
 
-    private void mostrarResultados() {
-        System.out.println("\n=== Resultados Finales ===");
-        jugador1.mostrarInfo();
-        jugador2.mostrarInfo();
+        System.out.println("\n--- Resumen de la Partida ---");
+        j1.mostrarInfo();
+        j2.mostrarInfo();
+        lector.close();
     }
 
     public static void main(String[] args) {
-        Juego juego = new Juego("Jugador 1", "Jugador 2");
-        juego.iniciarPartida();
+        new Juego().jugar();
     }
 }
