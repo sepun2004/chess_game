@@ -10,6 +10,8 @@ Para compilar el proyecto, ejecuta:
 javac -d out src/interfaces/*.java src/piezas/*.java src/main/*.java
 ```
 
+(Los archivos compilados se guardarán en la carpeta `out/`)
+
 ## Ejecución
 
 Para ejecutar el juego:
@@ -41,10 +43,12 @@ Las coordenadas van del 0 al 7 (filas y columnas).
 - Cada pieza implementa su propia lógica de validación de movimientos en `esMovimientoValido()`
 - La interfaz `Movible` define el contrato para el movimiento de piezas
 - Los atributos son privados/protegidos con getters y setters para encapsulación
+- **Polimorfismo:** En lugar de usar `instanceof`, utilizamos métodos polimórficos como `esRey()`, `esTorre()`, `esPeon()` para identificar tipos de piezas de manera limpia y profesional
+- **Método genérico de marcado:** `marcarMovimiento()` se implementa en cada subclase que lo necesita, simplificando la lógica del tablero
 - **Jaque y Jaque Mate:** Métodos en `Tablero` que validan el estado del rey en cada turno
 - **Enroque:** Validado mediante `puedeHacerEnroque()` que verifica que rey y torre no hayan movido
 - **Promoción:** El peón detecta automáticamente cuando alcanza la última fila y se promueve
-- **Tracking de movimientos:** Clases `Rey` y `Torre` contienen flags para rastrear si han movido
+- **Tracking de movimientos:** Clases `Rey` y `Torre` contienen flags `haMovido` para rastrear si han movido (accesibles vía `esHaMovido()`)
 
 ## Características implementadas
 
