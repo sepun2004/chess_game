@@ -39,8 +39,6 @@ public class Jugador {
         return piezasCapturadas;
     }
 
-    // --- Métodos de Lógica de Negocio ---
-
     /**
      * Incrementa el contador de piezas capturadas por el jugador.
      * Este método es invocado por la clase Juego tras un movimiento exitoso a casilla ocupada.

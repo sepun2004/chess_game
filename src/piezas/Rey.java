@@ -26,11 +26,21 @@ public class Rey extends Pieza {
     }
 
     /**
-     * Verifica si el rey ha movido antes.
-     * @return true si el rey ya se ha movido.
+     * Verifica si la torre ha movido antes.
+     * @return true si la torre ya se ha movido.
      */
     public boolean esHaMovido() {
         return haMovido;
+    }
+
+    @Override
+    public void marcarMovimiento() {
+        marcarComoMovido();
+    }
+
+    @Override
+    public boolean esRey() {
+        return true;
     }
 
     @Override

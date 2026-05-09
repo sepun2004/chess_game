@@ -52,19 +52,14 @@ public class Juego {
                 int cD = lector.nextInt();
 
                 // Intentar realizar el movimiento
-                Pieza resultado = tablero.moverPieza(fO, cO, fD, cD, actual.isBlanco());
+                boolean movimientoValido = tablero.moverPieza(fO, cO, fD, cD, actual.isBlanco());
 
-                if (resultado != null) {
+                if (movimientoValido) {
                     System.out.println(">> Movimiento confirmado.");
-
-                    // Si se capturó una pieza real
-                    if (resultado.getFila() != -1) {
-                        actual.capturarPieza();
-                    }
 
                     // Verificar promoción de peón
                     Pieza piezaMovida = tablero.obtenerPieza(fD, cD);
-                    if (piezaMovida instanceof Peon && ((Peon) piezaMovida).debeSerPromovido()) {
+                    if (piezaMovida.esPeon() && piezaMovida.puedeSerPromovido()) {
                         System.out.println("\n¡Promoción de peón! Elige el tipo:");
                         System.out.println("R - Reina (recomendado)");
                         System.out.println("T - Torre");

@@ -58,4 +58,14 @@ public class Peon extends Pieza {
     public boolean debeSerPromovido() {
         return (this.esBlanca && this.fila == 0) || (!this.esBlanca && this.fila == 7);
     }
+
+    @Override
+    public boolean esPeon() {
+        return true;
+    }
+
+    @Override
+    public boolean puedeSerPromovido() {
+        return debeSerPromovido();
+    }
 }

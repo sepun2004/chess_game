@@ -81,4 +81,49 @@ public abstract class Pieza implements Movible {
         this.columna = nuevaColumna;
         return true;
     }
+
+    /**
+     * Marca el movimiento de la pieza si es necesario.
+     * Por defecto no hace nada. Subclases como Rey y Torre lo pueden sobrescribir.
+     */
+    public void marcarMovimiento() {
+        // Por defecto, ninguna acción
+    }
+
+    /**
+     * Verifica si la pieza ha movido antes.
+     * Por defecto retorna false. Solo Rey y Torre lo sobrescriben.
+     */
+    public boolean esHaMovido() {
+        return false;
+    }
+
+    /**
+     * Verifica si esta pieza es un Rey.
+     */
+    public boolean esRey() {
+        return false;
+    }
+
+    /**
+     * Verifica si esta pieza es una Torre.
+     */
+    public boolean esTorre() {
+        return false;
+    }
+
+    /**
+     * Verifica si esta pieza es un Peón.
+     */
+    public boolean esPeon() {
+        return false;
+    }
+
+    /**
+     * Verifica si el peón puede ser promovido.
+     * Solo el Peón devuelve true si está en la última fila.
+     */
+    public boolean puedeSerPromovido() {
+        return false;
+    }
 }

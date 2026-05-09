@@ -33,6 +33,16 @@ public class Torre extends Pieza {
     }
 
     @Override
+    public void marcarMovimiento() {
+        marcarComoMovida();
+    }
+
+    @Override
+    public boolean esTorre() {
+        return true;
+    }
+
+    @Override
     public boolean esMovimientoValido(int destF, int destC, Pieza[][] tablero) {
         // La torre se mueve si la fila es igual o la columna es igual
         if (this.fila != destF && this.columna != destC) {
