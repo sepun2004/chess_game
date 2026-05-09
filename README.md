@@ -63,7 +63,3 @@ Las coordenadas van del 0 al 7 (filas y columnas).
 - **Jaque Mate** - Fin de partida cuando no hay escapes posibles
 - **Enroque** - Movimiento especial reino-torre (solo si no han movido antes y no hay jaque)
 - **Promoción de Peón** - Conversión automática a Reina/Torre/Alfil/Caballo en la última fila
-
----
-
-**Nota:** Por completar - Algunos movimientos especiales avanzados según reglas FIDE.
